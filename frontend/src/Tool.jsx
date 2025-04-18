@@ -21,12 +21,21 @@ const Tool = () => {
     setStep(prev => prev + 1);
   };
 
+
   const handleFileChange = (e) => {
     if (step > 1) return;
     const file = e.target.files[0];
-    setSelectedFile(file);
+    if (file) {
+      const fileType = file.name.split('.').pop().toLowerCase();
+      if (fileType !== 'txt') {
+        alert('Only .txt files are allowed!');
+        e.target.value = "";
+        return;
+      }
+      setSelectedFile(file);
+    }
   };
-
+  
   const handleDrop = (e) => {
     if (step > 1) return;
     e.preventDefault();
@@ -104,6 +113,7 @@ const Tool = () => {
         <input
           id="file-upload"
           type="file"
+          accept=".txt"    
           onChange={handleFileChange}
           className="file-input"
           disabled={step > 1}
