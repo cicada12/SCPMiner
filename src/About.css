@@ -1,0 +1,139 @@
+/* Container for content and ToC */
+html, body {
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  color: #000000;
+}
+
+
+.about-container {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 50px;
+    padding-right: 100px; /* Reserve space for ToC so content doesn’t overlap */
+    padding-left: 20px;
+    max-width: 100%;
+}
+  
+  .content {
+    flex: 1;
+    max-width: 1100px;
+  }
+  
+  p,
+  ul {
+    font-size: 18px;
+  }
+
+  .about-content {
+    flex: 1;
+    max-width: 800px;
+  }  
+
+  .content h1 {
+    font-size: 2.25rem;
+    color: black;
+    margin-top: 2rem;
+  }
+  
+  .content h2 {
+    font-size: 1.75rem;
+    color: #067bff;
+    margin-top: 2rem;
+  }
+  
+  .content h3 {
+    font-size: 1.25rem;
+    color: #000000;
+    margin-top: 1.25rem;
+  }
+  
+  /* Table of Contents */
+  .toc {
+    position: fixed;
+    top: 100px; /* Adjust as needed to sit below the header */
+    right: 20px; /* Pushes it to the far right — decrease this to move it further right */
+    width: 220px; /* Try reducing this if it's too wide */
+    max-height: 80vh;
+    font-size: 18px;
+    overflow-y: auto;
+    background-color: white;
+    padding: 20px;
+  }
+  
+  .toc ul {
+    list-style-type: disc; /* bullet points */
+    padding-left: 1.5rem;  /* indentation */
+    margin: 0;
+  }
+  
+  .toc li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .toc ul ul {
+    list-style-type: circle; /* optional: different bullet for nested list */
+    padding-left: 1.5rem;
+  }
+  
+  .toc h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #067bff;
+  }
+  
+  .toc a {
+    text-decoration: none;
+    color: #000;
+    transition: color 0.3s ease;
+  }
+  
+  .toc a:hover {
+    color: #067bff;
+  }
+  
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  .try-tool-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #067bff;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 1000;
+  
+    /* Fix button-specific issues */
+    display: inline-block;
+    width: auto;
+    max-width: 90vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    appearance: none;        /* Remove default OS/browser styles */
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    margin-right: 4.5rem;
+  }
+  
+  
+  .try-tool-btn:hover {
+    background-color: #005ecb;
+    transform: translateY(-2px);
+  }
+  
+  .try-tool-btn:active {
+    transform: translateY(0);
+  }
+  
