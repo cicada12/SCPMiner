@@ -1,0 +1,21 @@
+.citation-section {
+  background-color: #ffffff;
+  padding: 1rem 2rem; 
+}
+
+.citation-section .container {
+  max-width: 900px;
+}
+
+.citation-heading {
+  font-size: 1.75rem;
+  color: #000000;
+  margin-bottom: 1rem;
+}
+
+.citation-text {
+  color: #000000;
+  line-height: 1.6;
+  font-size: 1rem;
+  margin-bottom: 25rem;
+}
