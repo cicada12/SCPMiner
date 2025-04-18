@@ -147,6 +147,7 @@ const Tool = () => {
           </select>
         </div>
       </div>
+      <p className="file-type-info">Accepted file types: <strong>.txt</strong></p>
       {step === 1 && <button className="next-button" onClick={handleNext}>Next</button>}
 
         {/* Step 2 */}
