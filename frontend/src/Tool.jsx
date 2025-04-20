@@ -214,7 +214,12 @@ const Tool = () => {
         </div>
         {error && <p className="error-message">{error}</p>}
 
-        {step === 1 && <button className="next-button" onClick={handleNext}>Next</button>}
+        {/* Only show the Next button if a file is selected */}
+        {step === 1 && selectedFile && (
+          <button className="next-button" onClick={handleNext}>
+            Next
+          </button>
+        )}
 
 
         {/* Step 2 */}
