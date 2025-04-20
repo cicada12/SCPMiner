@@ -78,3 +78,12 @@ header nav a.active {
     margin: 0.5rem 0;
   }
 }
+.logo {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.logo:hover {
+  opacity: 0.8; /* Slight hover effect */
+}
