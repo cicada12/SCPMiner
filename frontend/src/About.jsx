@@ -8,6 +8,7 @@ function About() {
   return (
     <>
       <Header />
+      <div class="header-spacer"></div>
       <div className="about-container">
         <main className="content">
           

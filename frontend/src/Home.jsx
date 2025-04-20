@@ -32,11 +32,8 @@ export default function SCPMiner() {
       {/* Scrollable Second Section */}
       <section className="second_section">
         <div className="second_box">
-          <div className="left_pane">
-          <button className="algo_1_link" onClick={() => navigate('/about')}>● SCP</button>
-          </div>
           <div>
-            <h3 className="algo1">Subgraph Coverage Patterns</h3>
+            <h3 className="algo1" onClick={() => navigate('/about')}>Subgraph Coverage Patterns</h3>
             <p className="definition">
               Subgraph coverage pattern identifies frequent subgraphs within a dataset,
               capturing recurring structural patterns in graph-based data. It helps reveal
