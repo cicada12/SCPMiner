@@ -89,20 +89,25 @@ function About() {
 
         </main>
 
-        <aside className="toc">
-          <h3>Table of Contents</h3>
+        <div className="toc-hover-area">
+        <div className="toc-icon">📑</div>
+        <div className="hover-toc">
+          <h3>Contents</h3>
           <ul>
-            <li><a href="#heading">SCP</a>
-                <ul>
+            <li>
+              <a href="#heading">SCP</a>
+              <ul>
                 <li><a href="#desc">Description</a></li>
                 <li><a href="#param">Key Parameters</a></li>
                 <li><a href="#cases">Use Cases</a></li>
                 <li><a href="#usage">How to Use</a></li>
-                </ul>
+              </ul>
             </li>
-            </ul>
-        </aside>
+          </ul>
+        </div>
       </div>
+      </div>
+
       <button className="try-tool-btn" onClick={() => navigate('/tool')}>Try our Tool</button>
     </>
   );

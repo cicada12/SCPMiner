@@ -28,6 +28,7 @@ header nav {
 }
 
 header nav a {
+  margin: 0 10px;
   text-decoration: none;
   color: #000000;
   font-size: 1.25rem;

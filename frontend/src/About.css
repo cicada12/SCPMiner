@@ -52,18 +52,6 @@ html, body {
     margin-top: 1.25rem;
   }
   
-  /* Table of Contents */
-  .toc {
-    position: fixed;
-    top: 100px; /* Adjust as needed to sit below the header */
-    right: 20px; /* Pushes it to the far right — decrease this to move it further right */
-    width: 220px; /* Try reducing this if it's too wide */
-    max-height: 80vh;
-    font-size: 18px;
-    overflow-y: auto;
-    background-color: white;
-    padding: 20px;
-  }
   
   .toc ul {
     list-style-type: disc; /* bullet points */
@@ -219,3 +207,80 @@ html, body {
     padding: 7px 12px;
   }
 }
+
+/* Fixed container that wraps icon and hover ToC */
+.toc-hover-area {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 1100;
+}
+
+/* Icon styling */
+.toc-icon {
+  background-color: white;
+  color: white;
+  border: none;
+  font-size: 24px;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: none; /* shown only on small screens */
+}
+
+/* The hover-based ToC panel */
+.hover-toc {
+  display: none;
+  position: absolute;
+  top: 40px; /* below icon */
+  right: 0;
+  width: 220px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Show on hover */
+.toc-hover-area:hover .hover-toc {
+  display: block;
+}
+
+/* For larger screens: show ToC fully, hide icon */
+@media (min-width: 769px) {
+  .toc-hover-area {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+  }
+
+  .toc-icon {
+    display: none;
+  }
+
+  .hover-toc {
+    display: block !important;
+    position: fixed;
+    top: 90px;
+    right: 20px;
+  }
+}
+
+/* For smaller screens: show icon, hide ToC by default */
+@media (max-width: 768px) {
+  .toc-icon {
+    display: block;
+  }
+
+  .hover-toc {
+    display: none;
+  }
+
+  .toc-hover-area:hover .hover-toc {
+    display: block;
+  }
+}
+
