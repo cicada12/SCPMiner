@@ -1,48 +1,84 @@
-from fastapi import FastAPI, HTTPException
+import uvicorn
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 from pydantic import BaseModel
-from typing import Any, Dict
+from logic import run_algorithm
 
+# Define upload directory
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)  # Create if doesn't exist
+
+# Store temporary session data
+session_data = {
+    "filename": None,
+    "algorithm": None,
+    "parameters": {}
+}
+
+# Initialize FastAPI app
 app = FastAPI()
 
-# Define the request body structure using Pydantic
-class AlgorithmRequest(BaseModel):
-    file_content: str  # Assuming it's a string for simplicity
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Upload file endpoint
+@app.post("/uploadfile/")
+async def create_upload_file(file_upload: UploadFile = File(...)):
+    data = await file_upload.read()
+    save_to = UPLOAD_DIR / file_upload.filename
+    with open(save_to, 'wb') as f:
+        f.write(data)
+    session_data["filename"] = file_upload.filename
+    return {"filenames": file_upload.filename}
+
+# Select algorithm endpoint
+class AlgorithmSelection(BaseModel):
     algorithm: str
-    min_support: float = 0.5
-    max_overlap: float = 0.5
-    min_coverage: float = 0.5
 
-# Define a mock processing function for your algorithm
-def process_algorithm(file_content: str, algorithm: str, min_support: float, max_overlap: float, min_coverage: float) -> Dict[str, Any]:
-    # Simulate algorithm processing
-    result = {
-        'algorithm': algorithm,
-        'min_support': min_support,
-        'max_overlap': max_overlap,
-        'min_coverage': min_coverage,
-        'file_content_preview': file_content[:100],  # Show only the first 100 characters of content for demo
-        'message': 'Processing complete. Results are generated.',
-    }
-    return result
+@app.post("/set-algorithm")
+async def set_algorithm(selection: AlgorithmSelection):
+    session_data["algorithm"] = selection.algorithm
+    return {"message": "Algorithm received", "algorithm": selection.algorithm}
 
-@app.post("/api/run-algorithm/")
-async def run_algorithm(request: AlgorithmRequest):
-    try:
-        # Extract the data from the request body
-        file_content = request.file_content
-        algorithm = request.algorithm
-        min_support = request.min_support
-        max_overlap = request.max_overlap
-        min_coverage = request.min_coverage
-        
-        # Call the algorithm processing function
-        result = process_algorithm(file_content, algorithm, min_support, max_overlap, min_coverage)
+# Set parameters endpoint
+class ParameterConfig(BaseModel):
+    min_support: float
+    max_overlap: float
+    min_coverage: float
 
-        # Return the result as JSON
-        return result
+@app.post("/set-parameters")
+async def set_parameters(params: ParameterConfig):
+    session_data["parameters"] = params.dict()
+    return {"message": "Parameters received", "params": params}
 
-    except Exception as e:
-        # Handle exceptions and return an error message
-        raise HTTPException(status_code=400, detail=f"An error occurred: {str(e)}")
+# Run algorithm endpoint
+@app.post("/run")
+async def run_algorithm_endpoint():
+    filename = session_data["filename"]
+    algorithm = session_data["algorithm"]
+    params = session_data["parameters"]
 
-# Run the server using `uvicorn` (this is done externally, not in the script itself)
+    if not filename or not algorithm or not params:
+        return {"error": "Missing data. Ensure file, algorithm, and parameters are set."}
+
+    file_path = UPLOAD_DIR / filename
+    if not file_path.exists():
+        return {"error": "File not found"}
+
+    # Call user-defined algorithm
+    result = run_algorithm(
+        str(file_path),
+        algorithm,
+        params["min_support"],
+        params["max_overlap"],
+        params["min_coverage"]
+    )
+
+    return {"message": "Pipeline executed", "result": result}
