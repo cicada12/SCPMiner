@@ -26,8 +26,14 @@ const Tool = () => {
   const handleFileChange = (e) => {
     if (step > 1) return;
     const file = e.target.files[0];
+    if (file && (file.type !== "text/plain" && !file.name.endsWith(".txt"))) {
+      setError("Only .txt files are accepted.");
+      return;
+    }
+    setError("");
     setSelectedFile(file);
   };
+  
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -50,62 +56,6 @@ const Tool = () => {
     };
     reader.readAsText(file);
   };
-
-  const handleRun = async () => {
-    let fileContent = "";
-  
-    if (selectedFile) {
-      if (fileText) {
-        fileContent = fileText;  // already loaded (drag/drop)
-      } else if (fetchedText) {
-        fileContent = fetchedText;  // from predefined dataset
-      } else {
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-          fileContent = event.target.result;
-          await sendToBackend(fileContent);
-        };
-        reader.readAsText(selectedFile);
-        return;  // exit to wait for reader callback
-      }
-    }
-  
-    await sendToBackend(fileContent);
-  };
-  
-  const sendToBackend = async (content) => {
-    try {
-      const payload = {
-        algorithm,
-        min_support: minSupport,
-        max_overlap: maxOverlap,
-        min_coverage: minCoverage,
-        file_content: content,
-        filename: selectedFile?.name || dataset,
-      };
-  
-      const response = await fetch('/api/run-algorithm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.statusText}`);
-      }
-  
-      const result = await response.json();
-      alert("Algorithm completed successfully.");
-      console.log(result); // You can display results in the UI later.
-    } catch (err) {
-      console.error("Error sending data to backend:", err);
-      alert("Error: " + err.message);
-    }
-  };
-  
-
 
   const [showModal, setShowModal] = useState(false);
 
@@ -130,8 +80,92 @@ const Tool = () => {
     }
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!selectedFile) {
+      console.error("No file selected.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file_upload', selectedFile);
+    try {
+      const response = await fetch("http://localhost:8000/uploadfile/", {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Upload successful:", result);
+      } else {
+        console.error("Upload failed with status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during file upload:", error);
+    }
+  };
   
-
+  const submitAlgorithmSelection = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/set-algorithm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ algorithm }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to send algorithm");
+      }
+  
+      const data = await response.json();
+      console.log("Algorithm submitted:", data);
+    } catch (err) {
+      console.error("Error submitting algorithm:", err);
+    }
+  };
+  
+  const submitParameters = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/set-parameters", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          min_support: minSupport,
+          max_overlap: maxOverlap,
+          min_coverage: minCoverage,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to submit parameters");
+      }
+  
+      const data = await response.json();
+      console.log("Parameters submitted:", data);
+    } catch (err) {
+      console.error("Error submitting parameters:", err);
+    }
+  };
+  
+  const handleRunAlgorithm = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/run", {
+        method: "POST",
+      });
+  
+      const data = await response.json();
+      console.log("Algorithm result:", data);
+      alert("Algorithm executed successfully!");
+      // Optionally: setResult(data.result); to show output
+    } catch (error) {
+      console.error("Error running algorithm:", error);
+      alert("Failed to run algorithm.");
+    }
+  };
+  
 
   return (
     <>
@@ -187,12 +221,15 @@ const Tool = () => {
                 }
 
                 setDataset(selected);
-                setSelectedFile({ name: selected });
 
                 try {
                   const response = await fetch(`/datasets/${selected}`);
-                  const text = await response.text();
-                  setFetchedText(text);
+                  const blob = await response.blob();
+                
+                  const file = new File([blob], selected, { type: blob.type || "text/plain" });
+                
+                  setSelectedFile(file); 
+                  setFetchedText(await blob.text());
                   setFileText("");
                 } catch (err) {
                   console.error("Error loading dataset:", err);
@@ -200,6 +237,7 @@ const Tool = () => {
                   setFileText("");
                   setSelectedFile(null);
                 }
+                
               }}
               className="dropdown"
               disabled={step > 1}
@@ -214,13 +252,15 @@ const Tool = () => {
         </div>
         {error && <p className="error-message">{error}</p>}
 
-        {/* Only show the Next button if a file is selected */}
-        {step === 1 && selectedFile && (
-          <button className="next-button" onClick={handleNext}>
+        {step === 1 && selectedFile && !error && (
+          <button className="next-button" onClick={() => {
+            handleNext();
+            handleSubmit(new Event('submit'));
+          }}
+          >
             Next
           </button>
         )}
-
 
         {/* Step 2 */}
         {step >= 2 && (
@@ -235,7 +275,18 @@ const Tool = () => {
               <option value="" disabled>-- Select an algorithm --</option>
               <option value="Subgraph Coverage Patterns">Subgraph Coverage Patterns</option>
             </select>
-            {step === 2 && algorithm && <button className="next-button" onClick={handleNext}>Next</button>}
+            {step === 2 && algorithm && (
+              <button
+                className="next-button"
+                onClick={async () => {
+                  await submitAlgorithmSelection(); // Send algorithm to backend
+                  handleNext();                    // Proceed to next step
+                }}
+              >
+                Next
+              </button>
+            )}
+
           </>
         )}
 
@@ -269,7 +320,17 @@ const Tool = () => {
               <p className="slider-info">Minimum number of graphs that the selected subgraphs should collectively cover.</p>
               <p className="guidelines">Guidelines: Start off with high minimum supports and relative frequency, then gradually reduce them. For maximum overlap start of low then increase gradually.</p>
             </div>
-            {step === 3 && <button className="next-button" onClick={handleNext}>Next</button>}
+            {step === 3 && (
+              <button
+                className="next-button"
+                onClick={async () => {
+                  await submitParameters(); // Send parameters to backend
+                  handleNext();             // Proceed to next step
+                }}
+              >
+                Next
+              </button>
+            )}
           </>
         )}
 
@@ -277,9 +338,12 @@ const Tool = () => {
         {step >= 4 && (
           <>
             <h2>4 View results</h2>
-            <button className="run-button" onClick={handleRun}>Run Algorithm</button>
+            <button className="run-button" onClick={handleRunAlgorithm}>
+              Run Algorithm
+            </button>
           </>
         )}
+
       </div>
       <ReactModal
         isOpen={showModal}
