@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from "react";
 import "./Tool.css";
 import Header from './Header';
@@ -197,7 +198,7 @@ const Tool = () => {
               ) : (
                 "Drag and drop a txt file here, or click to select a txt file"
               )}
-            </div>
+            </div>```
           </label>
           <input
             id="file-upload"

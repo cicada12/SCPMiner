@@ -1,3 +1,4 @@
+
 import uvicorn
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -82,3 +83,4 @@ async def run_algorithm_endpoint():
     )
 
     return {"message": "Pipeline executed", "result": result}
+
