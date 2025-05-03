@@ -174,7 +174,7 @@ const Tool = () => {
       <div className="tool-container">
 
         {/* Step 1 */}
-        <h2>1 Upload datasets</h2>
+        <h2>1 Upload Files</h2>
         <div
           className={`upload-box ${step > 1 ? "disabled" : ""}`}
           ref={dropRef}
@@ -198,7 +198,7 @@ const Tool = () => {
               ) : (
                 "Drag and drop a txt file here, or click to select a txt file"
               )}
-            </div>```
+            </div>
           </label>
           <input
             id="file-upload"
@@ -256,7 +256,9 @@ const Tool = () => {
         {step === 1 && selectedFile && !error && (
           <button className="next-button" onClick={() => {
             handleNext();
-            handleSubmit(new Event('submit'));
+            // handleSubmit(new Event('submit'));
+            handleSubmit({ preventDefault: () => {} });
+
           }}
           >
             Next

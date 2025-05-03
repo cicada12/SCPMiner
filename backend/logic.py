@@ -1,15 +1,30 @@
 from rdkit import Chem
 
+from gspan import GSpan
+
 def run_algorithm(file_path: str, algorithm: str, min_support: float, max_overlap: float, min_coverage: float):
-    # Replace this with actual logic
-    smiles_to_gspan(file_path)
-    print(f"Running algorithm: {algorithm}")
-    print(f"File path: {file_path}")
-    print(f"Params -> Min Support: {min_support}, Max Overlap: {max_overlap}, Min Coverage: {min_coverage}")
+    with open(file_path, "r") as f:
+        smiles_list = [line.strip() for line in f.readlines()]
+    smiles_to_gspan(smiles_list)  # creates dataset.txt
+
+    gspan_runner = GSpan("dataset.txt", min_support)
+    gspan_runner.mine()
+
+    patterns = gspan_runner.getFrequentSubgraphs()
+
     return {
         "status": "success",
-        "details": f"Executed {algorithm} on {file_path}"
+        "algorithm": "Subgraph Coverage Patterns",
+        "parameters": {
+            "min_support": min_support,
+            "max_overlap": max_overlap,
+            "min_coverage": min_coverage
+        },
+        "executionTime": gspan_runner.getRuntime(),
+        "coveredGraphs": gspan_runner.graphCount,
+        "discoveredPatterns": patterns
     }
+
 
 
 def smiles_to_gspan(smiles_list, output_path="dataset.txt"):
