@@ -80,35 +80,6 @@ function About() {
             
           </section>
 
-          <section id="usage">
-          <h2>How to Use</h2>
-          <p>
-            Follow along the tutorial to upload your code files and receive a detailed results.
-          </p>
- <div
-              style={{
-                position: 'relative',
-                paddingBottom: '56.25%',
-                height: 0,
-                overflow: 'hidden',
-              }}
-            >
-              <iframe
-                src="https://www.youtube.com/embed/VeaAMwpiLbI"
-                title="Tutorial Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '80%',
-                  height: '70%',
-                }}
-              ></iframe>
-            </div> 
-        </section>
-
 
         </main>
 

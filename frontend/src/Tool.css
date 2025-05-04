@@ -345,7 +345,6 @@ input:disabled {
   }
 }
 
-
 @media (max-width: 600px) {
   .carousel-status {
     font-size: 12px !important;

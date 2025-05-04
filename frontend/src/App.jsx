@@ -5,6 +5,7 @@ import Citation from './Citation';
 import About from './About';
 import Tool from './Tool';
 import ScrollToTop from './ScrollToTop'; // import the component
+import Help from './Help';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/citations" element={<Citation />} />
         <Route path="/about" element={<About />} />
         <Route path="/tool" element={<Tool />} />
+        <Route path="/help" element={<Help />}/>
       </Routes>
     </Router>
   );
