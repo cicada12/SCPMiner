@@ -20,8 +20,8 @@ def read_gspan_output(file_path):
     return transactions
 
 def run_algorithm(file_path: str, algorithm: str, min_support: float, max_overlap: float, min_coverage: float):
-    extracted_string = file_path.split("\\", 1)[-1]
-    file_path = Path("uploads") / f"{extracted_string}"
+    # extracted_string = file_path.split("\\", 1)[-1]
+    # file_path = Path("uploads") / f"{extracted_string}"
     smiles_to_gtd(file_path, 'gtd.txt')
     
     dpath = 'gtd.txt'

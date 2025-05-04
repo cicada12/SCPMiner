@@ -2,7 +2,7 @@
 .first_section {
   width: 100%;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #f0f6f7;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -35,7 +35,7 @@
 }
 
 .get_started_btn {
-  background-color: #067bff;
+  background-color: #078BB3;
   color: #ffffff;
   padding: 0.5rem 1.5rem;
   border: none;
@@ -55,7 +55,7 @@
 .second_section {
   width: 100%;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #f0f6f7;
   padding: 4rem 5vw;
   box-sizing: border-box;
 }

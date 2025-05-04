@@ -6,6 +6,29 @@
   font-family: Arial, sans-serif;
   margin-right: 10rem;
 }
+.upload-container {
+  border: 2px solid #067bff;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: #f0f8ff;
+  margin-bottom: 2rem;
+}
+.upload-container {
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+.step-box {
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.upload-container:hover {
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
+}
 
 .upload-box {
   width: 100%;
@@ -17,7 +40,7 @@
   text-align: center;
   margin: 0 auto 20px auto;
   position: relative;
-  background-color: white;
+  background-color: rgb(247, 249, 249);
   transition: background-color 0.2s;
 }
 

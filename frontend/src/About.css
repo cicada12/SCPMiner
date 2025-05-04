@@ -1,6 +1,6 @@
 /* Container for content and ToC */
 html, body {
-  background-color: #ffffff;
+  background-color: #f0f6f7;
   margin: 0;
   padding: 0;
   color: #000000;
@@ -19,13 +19,16 @@ html, body {
   .content {
     flex: 1;
     max-width: 1100px;
+    
   }
   
+  body,
   p,
-  ul {
-    font-size: 18px;
+  ul,
+  .about-content,
+  .content {
+    font-family: 'Open Sans', sans-serif; /* Or any font you prefer */
   }
-
   .about-content {
     flex: 1;
     max-width: 800px;
@@ -36,7 +39,7 @@ html, body {
   
   .content h1 {
     font-size: 2.25rem;
-    color: black;
+    color: rgb(5, 5, 5);
     margin-top: 2rem;
   }
   
@@ -58,32 +61,31 @@ html, body {
     padding-left: 1.5rem;  /* indentation */
     margin: 0;
   }
-  
-  .toc li {
-    margin-bottom: 0.5rem;
+
+  .toc li,
+  .hover-toc li {
+    color: #ffffff;
   }
-  
+
   .toc ul ul {
     list-style-type: circle; /* optional: different bullet for nested list */
     padding-left: 1.5rem;
   }
   
-  .toc h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: #067bff;
-  }
-  
-  .toc a {
-    text-decoration: none;
-    color: #000;
-    transition: color 0.3s ease;
-  }
-  
-  .toc a:hover {
-    color: #067bff;
-  }
-  
+.toc h3,
+.hover-toc h3 {
+  color: #ffffff;
+}
+
+.toc a,
+.hover-toc a {
+  color: #ffffff;
+}
+
+.toc a:hover,
+.hover-toc a:hover {
+  color: #9696b1;
+}
   /* Smooth scroll behavior */
   html {
     scroll-behavior: smooth;
@@ -144,7 +146,7 @@ html, body {
     margin-top: 20px;
     padding: 15px;
     border-top: 1px solid #ccc;
-    background-color: #f9f9f9;
+    background-color: 0b9bc2;
   }
 
   .try-tool-btn {
@@ -218,7 +220,7 @@ html, body {
 
 /* Icon styling */
 .toc-icon {
-  background-color: white;
+  background-color: 0b9bc2;
   color: white;
   border: none;
   font-size: 24px;
@@ -235,7 +237,7 @@ html, body {
   top: 40px; /* below icon */
   right: 0;
   width: 220px;
-  background-color: white;
+  background-color: #078BB3;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;

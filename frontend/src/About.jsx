@@ -13,7 +13,7 @@ function About() {
         <main className="content">
           
             <section id = "heading">
-            <h1>Subgraph Coverage Patterns</h1>
+            <h1>SUBGRAPH COVERAGE PATTERNS</h1>
             </section>
             <section id="desc">
             <h2>Description</h2>

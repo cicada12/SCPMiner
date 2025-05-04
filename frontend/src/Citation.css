@@ -1,12 +1,28 @@
 .citation-section {
-  background-color: #ffffff;
-  padding: 1rem 2rem; 
+  background-color: #f8f6f6;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensures it takes up the full height of the viewport */
 }
 
-.citation-section .container {
-  max-width: 900px;
+.citation-box {
+  background-color: #ffffff; /* White background for the box */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the box */
+  padding: 2rem; /* Padding inside the box */
+  width: 100%; /* Full width of the parent container */
+  max-width: 900px; /* Maximum width of the citation box */
 }
-
+.step-box {
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
+}
 .citation-heading {
   font-size: 1.75rem;
   color: #000000;
@@ -17,5 +33,5 @@
   color: #000000;
   line-height: 1.6;
   font-size: 1rem;
-  margin-bottom: 25rem;
+  margin-bottom: 25px; /* Adjusted margin to avoid excessive spacing */
 }
