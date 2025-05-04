@@ -6,29 +6,6 @@
   font-family: Arial, sans-serif;
   margin-right: 10rem;
 }
-.upload-container {
-  border: 2px solid #067bff;
-  padding: 1rem;
-  border-radius: 12px;
-  background-color: #f0f8ff;
-  margin-bottom: 2rem;
-}
-.upload-container {
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-.step-box {
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-  background-color: #f9f9f9;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.upload-container:hover {
-  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
-}
 
 .upload-box {
   width: 100%;
@@ -40,7 +17,7 @@
   text-align: center;
   margin: 0 auto 20px auto;
   position: relative;
-  background-color: rgb(247, 249, 249);
+  background-color: white;
   transition: background-color 0.2s;
 }
 
@@ -313,6 +290,7 @@ input:disabled {
 
 .carousel {
   height: 100%;
+  
 }
 
 .carousel .slider-wrapper {
@@ -330,6 +308,24 @@ input:disabled {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+.carousel-next-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1001;
+  font-size: 16px;
+}
+
+.carousel-next-button:hover {
+  background-color: #333;
 }
 
 
@@ -377,7 +373,119 @@ input:disabled {
   background-color: #024ea5;
 }
 
+/* Add these new styles to fix the carousel and button issues */
 
+/* Improve carousel navigation controls */
+.carousel .control-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5) !important;
+  height: 50px !important;
+  width: 50px !important;
+  border-radius: 50%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8 !important;
+  transition: opacity 0.3s ease;
+}
+
+.carousel .control-arrow:hover {
+  opacity: 1 !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.carousel .control-prev {
+  left: 20px !important;
+}
+
+.carousel .control-next {
+  right: 20px !important;
+}
+
+/* Fix buttons positioning in the results section */
+.view-buttons-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+/* Improve carousel positioning */
+.modal-result-content {
+  width: 90vw;
+  height: 90vh;
+  background-color: white;
+  padding: 20px;
+  position: relative;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.carousel {
+  height: 80%; /* Adjust height to leave room for indicators */
+}
+
+.carousel .slider-wrapper {
+  height: 100%;
+}
+
+.carousel .slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-bottom: 3rem; /* Make space for indicators */
+}
+
+.carousel .slide img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+
+
+.carousel .control-dots {
+  bottom: 10px !important;
+}
+
+.carousel .control-dots .dot {
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 5px !important;
+}
+
+/* Step box adjustments */
+.step-box {
+  margin-bottom: 2rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+}
+
+/* Button adjustments */
+.run-button,
+.view-carousel-button,
+.download-results-button {
+  padding: 10px 20px;
+  margin-top: 2rem;
+  min-width: 150px;
+}
+.carousel .control-arrow {
+  top: 55% !important; /* was 50% */
+}
 
 /* ----------- Responsive Rules ----------- */
 
@@ -414,7 +522,5 @@ input:disabled {
     bottom: 10px;
   }
 
-  .carousel .control-arrow {
-    font-size: 20px;
-  }
+
 }
