@@ -344,3 +344,16 @@ input:disabled {
     height: 80vh;
   }
 }
+
+
+@media (max-width: 600px) {
+  .carousel-status {
+    font-size: 12px !important;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .carousel .control-arrow {
+    font-size: 20px;
+  }
+}
