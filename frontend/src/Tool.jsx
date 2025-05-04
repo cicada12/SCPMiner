@@ -65,6 +65,9 @@ const Tool = () => {
 
   const [algorithmRun, setAlgorithmRun] = useState(false);
 
+  
+
+
   const handleRunAlgorithmClick = () => {
     handleRunAlgorithm(); // Your existing algorithm logic
     setAlgorithmRun(true);
@@ -219,8 +222,7 @@ const Tool = () => {
       console.error("Error running algorithm:", error);
       alert("Failed to run algorithm or fetch images.");
     }
-  };
-  
+  };  
   
   
   return (
@@ -417,7 +419,7 @@ const Tool = () => {
     {/* Modal for the carousel */}
     {isCarouselVisible && (
       <div className="modal-overlay" onClick={closeCarouselModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-result-content" onClick={(e) => e.stopPropagation()}>
           <button onClick={closeCarouselModal} className="close-modal-button">
             X
           </button>
@@ -433,8 +435,6 @@ const Tool = () => {
     )}
   </>
 )}
-
-
       </div>
       <ReactModal
         isOpen={showModal}
