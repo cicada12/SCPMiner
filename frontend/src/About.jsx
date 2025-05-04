@@ -57,7 +57,7 @@ function About() {
             <h2>Key parameters</h2>
             <ul>
               <li>
-              Minimum Relative Frequency Threshold: Ensures that the pattern appears in a sufficient proportion of graphs in the dataset, filtering out infrequent patterns.
+              Minimum Support Threshold: Ensures that the pattern appears in a sufficient proportion of graphs in the dataset, filtering out infrequent patterns.
               </li>
               <li>
               Maximum Allowed Overlap: Limits how much individual subgraphs within a pattern can share common nodes or edges, preserving pattern distinctiveness.
