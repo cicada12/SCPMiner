@@ -1,10 +1,12 @@
-
 import uvicorn
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from pydantic import BaseModel
 from logic import run_algorithm
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+import os
 
 # Define upload directory
 UPLOAD_DIR = Path("uploads")
@@ -19,6 +21,9 @@ session_data = {
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Mount the folder containing generated images (static serving)
+app.mount("/images", StaticFiles(directory="scp_images"), name="images")
 
 # Add CORS middleware
 app.add_middleware(
@@ -73,7 +78,7 @@ async def run_algorithm_endpoint():
     if not file_path.exists():
         return {"error": "File not found"}
 
-    # Call user-defined algorithm
+    # Call your SCP algorithm function
     result = run_algorithm(
         str(file_path),
         algorithm,
@@ -84,3 +89,9 @@ async def run_algorithm_endpoint():
 
     return {"message": "Pipeline executed", "result": result}
 
+@app.get("/get-images")
+async def get_generated_images():
+    image_folder = "scp_images"
+    images = sorted([f for f in os.listdir(image_folder) if f.endswith(".png") or f.endswith(".jpg")])
+    image_urls = [f"/images/{img}" for img in images[:10]]
+    return JSONResponse(content={"images": image_urls})
