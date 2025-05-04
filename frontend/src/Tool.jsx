@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import "./Tool.css";
 import Header from './Header';
@@ -507,18 +506,21 @@ const Tool = () => {
               <button onClick={closeCarouselModal} className="close-modal-button">
                 X
               </button>
-              <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
+              <div className="step-box">
+               <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
                 {images.map((url, idx) => (
                   <div key={idx}>
                     <img src={`http://localhost:8000${url}`} alt={`SCP ${idx}`} />
                   </div>
                 ))}
-              </Carousel>
+              </Carousel> 
+              </div>
             </div>
           </div>
         )}
       </div>
-      
+
+
       <ReactModal
         isOpen={showModal}
         onRequestClose={closeModal}
