@@ -1,9 +1,11 @@
-
 import React, { useState, useRef } from "react";
 import "./Tool.css";
 import Header from './Header';
 import ReactModal from 'react-modal';
-
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 const Tool = () => {
   const [step, setStep] = useState(1);
@@ -16,7 +18,6 @@ const Tool = () => {
   const [algorithm, setAlgorithm] = useState("");
   const [fetchedText, setFetchedText] = useState("");  // stores content in background
   const [error, setError] = useState("");
-
 
   const dropRef = useRef(null);
 
@@ -61,6 +62,30 @@ const Tool = () => {
   const [showModal, setShowModal] = useState(false);
 
   const closeModal = () => setShowModal(false);
+
+  const [algorithmRun, setAlgorithmRun] = useState(false);
+
+  const handleRunAlgorithmClick = () => {
+    handleRunAlgorithm(); // Your existing algorithm logic
+    setAlgorithmRun(true);
+  };
+
+  
+  const handleDownloadResults = async () => {
+    const zip = new JSZip();
+    const folder = zip.folder("results"); // optional: creates a subfolder in the zip
+  
+    for (let i = 0; i < images.length; i++) {
+      const url = `http://localhost:8000${images[i]}`;
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const arrayBuffer = await blob.arrayBuffer(); // convert blob to arrayBuffer
+      folder.file(`result_${i + 1}.jpg`, arrayBuffer); // add file to zip
+    }
+  
+    const content = await zip.generateAsync({ type: "blob" });
+    saveAs(content, "results.zip"); // download the zip
+  };
 
   const handleViewFile = () => {
     if (!selectedFile) return;
@@ -151,30 +176,60 @@ const Tool = () => {
     }
   };
   
+  const [images, setImages] = useState([]);
+  const [isCarouselVisible, setCarouselVisible] = useState(false);
+
+  const openCarouselModal = () => {
+    setCarouselVisible(true);
+  };
+
+  const closeCarouselModal = () => {
+    setCarouselVisible(false);
+  };
+
   const handleRunAlgorithm = async () => {
     try {
+      // Trigger the algorithm to run
       const response = await fetch("http://localhost:8000/run", {
         method: "POST",
       });
   
       const data = await response.json();
       console.log("Algorithm result:", data);
-      alert("Algorithm executed successfully!");
-      // Optionally: setResult(data.result); to show output
+  
+      // Fetch generated images after successful run
+      const imageRes = await fetch("http://localhost:8000/get-images");
+      const imageData = await imageRes.json();
+  
+      // Log image URLs to the console
+      if (imageData.images && imageData.images.length > 0) {
+        console.log("Generated images:");
+        imageData.images.forEach((url, idx) => {
+          console.log(`Image ${idx + 1}: http://localhost:8000${url}`);
+        });
+  
+        // Update the state to trigger carousel rendering
+        setImages(imageData.images);
+  
+        // Optionally, you can activate carousel features here if your carousel requires additional setup (e.g., triggering animation).
+      } else {
+        console.log("No images found.");
+      }
     } catch (error) {
       console.error("Error running algorithm:", error);
-      alert("Failed to run algorithm.");
+      alert("Failed to run algorithm or fetch images.");
     }
   };
   
-
+  
+  
   return (
     <>
       <Header />
       <div className="tool-container">
 
         {/* Step 1 */}
-        <h2>1 Upload Files</h2>
+        <h2>1 Upload datasets</h2>
         <div
           className={`upload-box ${step > 1 ? "disabled" : ""}`}
           ref={dropRef}
@@ -256,9 +311,7 @@ const Tool = () => {
         {step === 1 && selectedFile && !error && (
           <button className="next-button" onClick={() => {
             handleNext();
-            // handleSubmit(new Event('submit'));
-            handleSubmit({ preventDefault: () => {} });
-
+            handleSubmit(new Event('submit'));
           }}
           >
             Next
@@ -299,7 +352,7 @@ const Tool = () => {
             <h2>3 Set parameters</h2>
             <div className="slider-container">
               {/* Min Support */}
-              <label>a. Minimum Relative Frequency</label>
+              <label>a. Minimum Support</label>
               <input type="range" min="0" max="1" step="0.01" value={minSupport}
                 onChange={(e) => setMinSupport(Number(e.target.value))} disabled={step > 3} />
               <input type="number" min="0" max="1" step="0.01" value={minSupport}
@@ -315,13 +368,13 @@ const Tool = () => {
               <p className="slider-info">Maximum percentage of overlap allowed between discovered subgraphs.</p>
 
               {/* Min Coverage */}
-              <label>c. Minimum Coverage Support</label>
+              <label>c. Minimum Coverage</label>
               <input type="range" min="0" max="1" step="0.01" value={minCoverage}
                 onChange={(e) => setMinCoverage(Number(e.target.value))} disabled={step > 3} />
               <input type="number" min="0" max="1" step="0.01" value={minCoverage}
                 onChange={(e) => setMinCoverage(Number(e.target.value))} disabled={step > 3} />
               <p className="slider-info">Minimum number of graphs that the selected subgraphs should collectively cover.</p>
-              <p className="guidelines">Guidelines: Start off with high minimum supports and relative frequency, then gradually reduce them. For maximum overlap start of low then increase gradually.</p>
+              <p className="guidelines">Guidelines: Start with a high minimum support and minimum coverage, then gradually reduce them to explore more patterns. Begin with a low maximum overlap and increase it gradually if needed.</p>
             </div>
             {step === 3 && (
               <button
@@ -337,15 +390,50 @@ const Tool = () => {
           </>
         )}
 
-        {/* Step 4 */}
-        {step >= 4 && (
+{step >= 4 && (
+  <>
+    <h2>4. View Results</h2>
+
+    {/* Conditionally render Run button or View/Download buttons */}
+    {!algorithmRun ? (
+      <button className="run-button" onClick={handleRunAlgorithmClick}>
+        Run Algorithm
+      </button>
+    ) : (
+      <>
+        {images.length > 0 && (
           <>
-            <h2>4 View results</h2>
-            <button className="run-button" onClick={handleRunAlgorithm}>
-              Run Algorithm
+            <button onClick={openCarouselModal} className="view-carousel-button">
+              View Results
+            </button>
+            <button onClick={handleDownloadResults} className="download-results-button">
+            Download
             </button>
           </>
         )}
+      </>
+    )}
+
+    {/* Modal for the carousel */}
+    {isCarouselVisible && (
+      <div className="modal-overlay" onClick={closeCarouselModal}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <button onClick={closeCarouselModal} className="close-modal-button">
+            X
+          </button>
+          <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
+            {images.map((url, idx) => (
+              <div key={idx}>
+                <img src={`http://localhost:8000${url}`} alt={`SCP ${idx}`} />
+              </div>
+            ))}
+          </Carousel>
+        </div>
+      </div>
+    )}
+  </>
+)}
+
 
       </div>
       <ReactModal
