@@ -41,6 +41,31 @@
   margin-bottom: 10px;
 }
 
+.algorithm-wrapper.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.algorithm-wrapper.disabled select {
+  cursor: not-allowed;
+}
+
+.reset-button {
+  background-color: #067bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 3rem;
+  margin-left: 65rem;
+  cursor: pointer;
+}
+.reset-button:hover {
+  background-color: #0252ae;
+}
+
+
 .view-button {
   padding: 8px 16px;
   background-color: #067bff;
@@ -120,7 +145,7 @@
 
 .slider-info {
   font-size: 17px;
-  color: rgb(96, 96, 96);
+  color: rgb(0, 0, 0);
 }
 
 .slider-container label {
@@ -139,6 +164,20 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
+.parameter-wrapper.disabled {
+  opacity: 0.6;
+  pointer-events: none; /* Prevent interaction */
+  user-select: none;
+}
+
+.parameter-wrapper.disabled input,
+.parameter-wrapper.disabled label,
+.parameter-wrapper.disabled .slider-info,
+.parameter-wrapper.disabled .guidelines {
+  cursor: not-allowed;
+}
+
 
 .run-button:hover {
   background-color: #0056b3;

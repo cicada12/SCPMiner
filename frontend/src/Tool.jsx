@@ -21,6 +21,21 @@ const Tool = () => {
 
   const dropRef = useRef(null);
 
+  const handleReset = () => {
+    setStep(1);
+    setSelectedFile(null);
+    setDataset("");
+    setFileText("");
+    setFetchedText("");
+    setAlgorithm("");
+    setMinSupport(0.5);      // Reset to your desired default
+    setMaxOverlap(0.5);      // Reset to your desired default
+    setMinCoverage(0.5);     // Reset to your desired default
+    setImages([]);           // Clear result images
+    setAlgorithmRun(false);  // Reset algorithm run state
+    setError("");
+  };
+
   const handleNext = () => {
     setStep(prev => prev + 1);
   };
@@ -229,6 +244,11 @@ const Tool = () => {
     <>
       <Header />
       <div className="tool-container">
+      {step > 1 && (
+        <button className="reset-button" onClick={handleReset}>
+          Reset
+        </button>
+      )}
 
         {/* Step 1 */}
         <h2>1 Upload datasets</h2>
@@ -323,7 +343,8 @@ const Tool = () => {
         {/* Step 2 */}
         {step >= 2 && (
           <>
-            <h2>2 Select Algorithm</h2>
+          <h2>2 Select Algorithm</h2>
+          <div className={`algorithm-wrapper ${step > 2 ? 'disabled' : ''}`}>
             <select
               value={algorithm}
               onChange={(e) => setAlgorithm(e.target.value)}
@@ -333,25 +354,28 @@ const Tool = () => {
               <option value="" disabled>-- Select an algorithm --</option>
               <option value="Subgraph Coverage Patterns">Subgraph Coverage Patterns</option>
             </select>
-            {step === 2 && algorithm && (
-              <button
-                className="next-button"
-                onClick={async () => {
-                  await submitAlgorithmSelection(); // Send algorithm to backend
-                  handleNext();                    // Proceed to next step
-                }}
-              >
-                Next
-              </button>
-            )}
-
-          </>
+          </div>
+        
+          {step === 2 && algorithm && (
+            <button
+              className="next-button"
+              onClick={async () => {
+                await submitAlgorithmSelection();
+                handleNext();
+              }}
+            >
+              Next
+            </button>
+          )}
+        </>
+        
         )}
 
         {/* Step 3 */}
         {step >= 3 && (
           <>
-            <h2>3 Set parameters</h2>
+          <h2>3 Set parameters</h2>
+          <div className={`parameter-wrapper ${step > 3 ? 'disabled' : ''}`}>
             <div className="slider-container">
               {/* Min Support */}
               <label>a. Minimum Support</label>
@@ -360,7 +384,7 @@ const Tool = () => {
               <input type="number" min="0" max="1" step="0.01" value={minSupport}
                 onChange={(e) => setMinSupport(Number(e.target.value))} disabled={step > 3} />
               <p className="slider-info">Minimum percentage of graphs a subgraph must appear in to be considered frequent.</p>
-
+        
               {/* Max Overlap */}
               <label>b. Maximum Allowed Overlap</label>
               <input type="range" min="0" max="1" step="0.01" value={maxOverlap}
@@ -368,7 +392,7 @@ const Tool = () => {
               <input type="number" min="0" max="1" step="0.01" value={maxOverlap}
                 onChange={(e) => setMaxOverlap(Number(e.target.value))} disabled={step > 3} />
               <p className="slider-info">Maximum percentage of overlap allowed between discovered subgraphs.</p>
-
+        
               {/* Min Coverage */}
               <label>c. Minimum Coverage</label>
               <input type="range" min="0" max="1" step="0.01" value={minCoverage}
@@ -376,21 +400,26 @@ const Tool = () => {
               <input type="number" min="0" max="1" step="0.01" value={minCoverage}
                 onChange={(e) => setMinCoverage(Number(e.target.value))} disabled={step > 3} />
               <p className="slider-info">Minimum number of graphs that the selected subgraphs should collectively cover.</p>
+        
               <p className="guidelines">Guidelines: Start with a high minimum support and minimum coverage, then gradually reduce them to explore more patterns. Begin with a low maximum overlap and increase it gradually if needed.</p>
             </div>
-            {step === 3 && (
-              <button
-                className="next-button"
-                onClick={async () => {
-                  await submitParameters(); // Send parameters to backend
-                  handleNext();             // Proceed to next step
-                }}
-              >
-                Next
-              </button>
-            )}
-          </>
+          </div>
+        
+          {step === 3 && (
+            <button
+              className="next-button"
+              onClick={async () => {
+                await submitParameters();
+                handleNext();
+              }}
+            >
+              Next
+            </button>
+          )}
+        </>
         )}
+
+
 
 {step >= 4 && (
   <>
@@ -415,6 +444,7 @@ const Tool = () => {
         )}
       </>
     )}
+
 
     {/* Modal for the carousel */}
     {isCarouselVisible && (
