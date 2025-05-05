@@ -94,7 +94,6 @@ function About() {
                 <li><a href="#desc">Description</a></li>
                 <li><a href="#param">Key Parameters</a></li>
                 <li><a href="#cases">Use Cases</a></li>
-                <li><a href="#usage">How to Use</a></li>
               </ul>
             </li>
           </ul>
