@@ -472,7 +472,7 @@ input:disabled {
   border: 1px solid #eee;
   border-radius: 8px;
   padding: 1.5rem;
-  background-color: #f9f9f9;
+  background-color: #d0d0d0;
 }
 
 /* Button adjustments */
@@ -486,6 +486,20 @@ input:disabled {
 .carousel .control-arrow {
   top: 55% !important; /* was 50% */
 }
+
+.result-text {
+  text-align: center;
+  font-size: 20px; /* adjust as needed */
+  margin: 10px 0;
+  color: #2e2e2e; /* optional: controls text color */
+  font-weight:550;
+}
+
+#result1 {
+  margin-bottom: 1rem;
+  font-size: 16px;
+}
+
 
 /* ----------- Responsive Rules ----------- */
 

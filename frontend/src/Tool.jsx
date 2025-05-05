@@ -506,6 +506,8 @@ const Tool = () => {
               <button onClick={closeCarouselModal} className="close-modal-button">
                 X
               </button>
+              <p className="result-text">Subgraph Coverage Patterns</p>
+              <p className="result-text" id = "result1">Minimum Coverage: {minCoverage} &nbsp;&nbsp;&nbsp; Minimum Support: {minSupport}  &nbsp;&nbsp;&nbsp; Maximum Overlap: {maxOverlap}</p>
               <div className="step-box">
                <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
                 {images.map((url, idx) => (
