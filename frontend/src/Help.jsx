@@ -15,7 +15,7 @@ const Help = () => {
         <div className="video-wrapper">
           <div className="video-container">
             <iframe
-              src="https://www.youtube.com/embed/VeaAMwpiLbI"
+              src="https://www.youtube.com/embed/mACRUJsP0bU"
               title="Tutorial Video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
