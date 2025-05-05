@@ -60,6 +60,7 @@
   margin-top: 3rem;
   margin-left: 65rem;
   cursor: pointer;
+  margin-bottom: 1rem;
 }
 .reset-button:hover {
   background-color: #0252ae;
